@@ -5,19 +5,8 @@ COL = 1
 FIELD = 0
 MATCH = 1
 
-num = gets.chomp.to_i
-size = Array.new(2) { Array.new(2, 0) }
-grid = Array.new(2)
-
-num.times do 
-	(0..1).each do |t|
-		size[t] = gets.strip.split(" ").map(&:to_i)
-		grid[t] = Array.new(size[t][ROW]) { Array.new(size[t][COL], 0) }
-		(0...size[t][ROW]).each do |r|
-			grid[t][r] = gets.strip.split("").map(&:to_i)
-		end			
-	end
-
+def find_match(grid, size)
+	# brute_force
 	find = false
 	max = size.transpose.map { |x| x.reduce(:-) }
 	(0..max[ROW]).each do |r|
@@ -36,15 +25,24 @@ num.times do
 	end
 
 	if find 
-		puts "YES"
+		"YES"
 	else
-		puts "NO"
+		"NO"
 	end
-=begin
+end
+
+num = gets.chomp.to_i
+size = Array.new(2) { Array.new(2, 0) }
+grid = Array.new(2)
+
+num.times do 
 	(0..1).each do |t|
+		size[t] = gets.strip.split(" ").map(&:to_i)
+		grid[t] = Array.new(size[t][ROW]) { Array.new(size[t][COL], 0) }
 		(0...size[t][ROW]).each do |r|
-			puts grid[t][r].join
-		end
+			grid[t][r] = gets.strip.split("").map(&:to_i)
+		end			
 	end
-=end
+
+	puts find_match(grid, size)
 end
