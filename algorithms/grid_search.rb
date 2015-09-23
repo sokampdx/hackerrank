@@ -5,14 +5,6 @@ COL = 1
 FIELD = 0
 MATCH = 1
 
-class String
-  def indices e
-    start, result = -1, []
-    result << start while start = (self.index e, start + 1)
-    result
-  end
-end
-
 num = gets.chomp.to_i
 size = Array.new(2) { Array.new(2, 0) 
 match = Array.new(2)}
@@ -28,48 +20,30 @@ num.times do
 		end	
 	end
 
-	string = grid[Field].join
-	
+	text = grid[FIELD].join
+	match = size.transpose.map {|x| x.reduce(:-)}
+	temp = ""
 
-	max = size[FIELD][ROW] - size[MATCH][ROW]
-	match = Array.new(size[MATCH][ROW])
+	start_pos = 0
+	end_pos = match[COL]
 
-	(0..max[ROW]).each do |r|
-		(0..size[MATCH][ROW]).each do |m_r|
-			match[m_r] = grid[FIELD][r].indices /#{grid[MATCH][m_r]}/
-		end
+	(0...match[ROW]).each do	
+		temp += "^[0-9]{#{start_pos},#{end_pos}}|"
+		start_pos += size[FIELD][COL]
+		end_pos += size[FIELD][COL]
 	end
 
+	prefix = "(" + temp[0...-1]	+ ")"
+	ignore = "[0-9]{#{match[COL]}}"
+	filler = Array.new(size[MATCH][ROW]-1, ignore)
+	combine = prefix + grid[MATCH].zip(filler).join
+	pattern = Regexp.new(combine)
 
+#	puts combine
 
-=begin
-	find = false
-	max = size.transpose.map { |x| x.reduce(:-) }
-	(0..max[ROW]).each do |r|
-		(0..max[COL]).each do |c|
-			match = true
-			(0...size[MATCH][ROW]).each do |m_r|
-				(0...size[MATCH][COL]).each do |m_c|
-					match = match && ( grid[FIELD][r+m_r][c+m_c] == grid[MATCH][m_r][m_c] )
-					next if !match
-				end
-				next if !match
-			end
-			find = find || match
-			break if find
-		end
-	end
-
-	if find 
+	if text.match(pattern)
 		puts "YES"
 	else
 		puts "NO"
-	end
-=end
-
-	(0..1).each do |t|
-		(0...size[t][ROW]).each do |r|
-			puts grid[t][r]
-		end
 	end
 end
