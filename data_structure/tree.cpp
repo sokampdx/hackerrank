@@ -81,8 +81,7 @@ void LevelOrder(node* root) {
     }
 }
 
-node * insert(node * root, int value)
-{
+node * insert(node * root, int value) {
   if (!root)
     return new node {value, NULL, NULL};
 
@@ -92,4 +91,22 @@ node * insert(node * root, int value)
     root->right = insert(root->right, value);
   
   return root;
+}
+
+node* lca(node* root, int v1, int v2) {
+  if (!root)
+    return NULL;
+
+  int value = root->data;
+  
+  if (v1 == value || v2 == value)
+    return root;
+  
+  if ((v1 < value && v2 > value) || (v1 > value && v2 < value))
+    return root;
+  
+  if (v1 < value && v2 < value)
+    return lca(root->left, v1, v2);
+  else
+    return lca(root->right, v1, v2);
 }
